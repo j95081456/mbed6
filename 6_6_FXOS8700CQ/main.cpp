@@ -37,8 +37,8 @@ int m_addr = FXOS8700CQ_SLAVE_ADDR1;
 
 void FXOS8700CQ_readRegs(int addr, uint8_t * data, int len);
 void FXOS8700CQ_writeRegs(uint8_t * data, int len);
-void Acc(/*float * t, int16_t acc16, uint8_t * res*/);
-void call_Acc(/*float * t, int16_t acc16, uint8_t * res*/);
+void Acc();
+void call_Acc();
 void LED();
 void call_LED();
 
@@ -57,6 +57,14 @@ int main() {
    //sw2.rise(queue2.event(&call_Acc));
    //sw2.rise(&call_Acc);
    
+}
+
+void call_Acc() {
+   queue1.call(&Acc);
+   
+}
+void call_LED() {
+   queue2.call(&LED);
 }
 
 void FXOS8700CQ_readRegs(int addr, uint8_t * data, int len) {
@@ -112,21 +120,16 @@ void Acc(/*float * t, int16_t acc16, uint8_t * res*/) {
       t[2] = ((float)acc16) / 4096.0f;
 
 
-      /*tt[i][0] = t[0];
-      tt[i][1] = t[1];
-      tt[i][2] = t[2];*/
-      //wait(0.1);  
-   //}
+      
 
-   //for ( i = 0; i < 100; i++) {
-      //pc.printf("%1.4f\r\n%1.4f\r\n%1.4f\r\n", tt[i][0], tt[i][1], tt[i][2]);
+   
       pc.printf("%1.4f \r\n",t[0]);
       wait(0.02);
       pc.printf("%1.4f \r\n",t[1]);
       wait(0.02);
       pc.printf("%1.4f \r\n",t[2]);
       wait(0.02);
-      pc.printf("i\n");
+      //pc.printf("i\n");
      wait(0.02);
      wait(0.02);
    }
@@ -143,10 +146,3 @@ void LED() {
    
 }
 
-void call_Acc(/*float * t, int16_t acc16, uint8_t * res*/) {
-   queue1.call(&Acc);
-   //queue1.call_every(100, Acc);
-}
-void call_LED() {
-   queue2.call(&LED);
-}
